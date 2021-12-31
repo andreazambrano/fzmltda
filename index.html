@@ -667,21 +667,16 @@
 									<div class="container small top-bottom-padding-120 form-box">
 										<h4 class="small-title-oswald text-color-4 text-center">Contactenos<br>Escribanos para dudas o solicitar servicios.</h4>
 										<!-- flex-container start -->
-										<form class="flex-container top-padding-90" method="post" name="formobrsv" id="send_form">
+										<form class="flex-container top-padding-90" method="post" action="https://422k6x1691.execute-api.us-east-1.amazonaws.com/prod/contact" > <!-- name="formobrsv" id="send_form" -->
 											<!-- column start -->
 											<div class="four-columns">
 												<div class="content-right-margin-10 input-box">
-						                       		<input type="text" name="first_name" id="first_name" required class="form-input pointer-small">
-						                       		<label for="first_name" class="form-label">First name</label>
+						                       		<input type="text" name="first_name" id="name" required class="form-input pointer-small">
+						                       		<label for="name" class="form-label">Nombre completo</label>
 											   	</div>
 											</div><!-- column end -->
 											<!-- column start -->
-											<div class="four-columns">
-												<div class="content-left-right-margin-5 input-box">
-						                       		<input type="text" name="last_name" id="last_name" required class="form-input pointer-small">
-						                       		<label for="last_name" class="form-label">Last name</label>
-												</div>
-											</div><!-- column end -->
+											
 											<!-- column start -->
 					                        <div class="four-columns">
 						                        <div class="content-left-margin-10 input-box">
@@ -691,7 +686,11 @@
 						                    </div><!-- column end -->
 						                    <!-- column start -->
 											<div class="twelve-columns input-box message-input">
-					                       		<textarea name="message" id="message" required class="form-input pointer-small"></textarea>
+					                       		<textarea name="subject" id="subject" required class="form-input pointer-small"></textarea>
+					                       		<label for="message" class="form-label">Asunto</label>
+											</div>
+											<div class="twelve-columns input-box message-input">
+					                       		<textarea name="asunto" id="asunto" required class="form-input pointer-small"></textarea>
 					                       		<label for="message" class="form-label">Message content</label>
 											</div><!-- column end -->
 											<!-- column start -->
@@ -793,3 +792,51 @@
         <script src="assets/js/main.js"></script>
 	</body>
 </html>
+<script type="text/javascript">
+
+
+
+   async function postFormDataAsJson({ url, formData }) {
+       const plainFormData = Object.fromEntries(formData.entries());
+       const formDataJsonString = JSON.stringify(plainFormData);
+
+       const fetchOptions = {
+           method: "POST",
+           headers: {
+               "Content-Type": "application/json",
+               Accept: "application/json",
+           },
+           body: formDataJsonString,
+       };
+
+       const response = await fetch(url, fetchOptions);
+
+       if (!response.ok) {
+           const errorMessage = await response.text();
+           throw new Error(errorMessage);
+       }
+
+       return response.json();
+   }
+
+
+   async function handleFormSubmit(event) {
+       event.preventDefault();
+
+       const form = event.currentTarget;
+       const url = form.action;
+
+       try {
+           const formData = new FormData(form);
+           const responseData = await postFormDataAsJson({ url, formData });
+
+           console.log({ responseData });
+       } catch (error) {
+           console.error(error);
+       }
+   }
+
+   const exampleForm = document.getElementById("contactFormInfo");
+   exampleForm.addEventListener("submit", handleFormSubmit);
+
+</script>
