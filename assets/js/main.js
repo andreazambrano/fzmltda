@@ -103,7 +103,10 @@ $(function() {
 		    overlay : true,
 		    overlayClass : 'animsition-overlay-slide',
 		    overlayParentElement : 'body',
-		    transition: function(url){ window.location.href = url; }
+		    transition: function(url){ window.location.href = url;
+		    	window.location.reload();
+		     }
+
 		});
 			
 		$('body').on('animsition.outStart', function(){
@@ -384,16 +387,16 @@ $(function() {
 
 	/* 16. Contact form */
 	$("#send_form").on('submit', function(){
-		var first_name = $("#first_name").val().trim();
-		var last_name = $("#last_name").val().trim();
+		var nombre = $("#nombre").val().trim();
 		var email = $("#email").val().trim();
-		var message = $("#message").val().trim();
+		var asunto = $("#asunto").val().trim();
+		var mensaje = $("#mensaje").val().trim();
 
 		$.ajax({
 			url: 'assets/ajax/mail.php',
 			type: 'POST',
 			cache: false,
-			data: {'first_name': first_name, 'last_name': last_name, 'email': email, 'message': message},
+			data: {'nombre': nombre, 'asunto': asunto, 'email': email, 'message': message},
 			dataType: 'html',
 			beforeSend: function() {
 				$("#send").addClass("js-active");
@@ -452,5 +455,7 @@ $(function() {
 			$('.email-label').removeClass("js-active");
 		}
 	});
+
+	
 
 });
